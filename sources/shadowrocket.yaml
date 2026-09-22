@@ -1,0 +1,8 @@
+format: shadowrocket
+sources:
+  - name: shadowrocket-rules
+    url: https://raw.githubusercontent.com/GMOogway/shadowrocket-rules/master/sr_reject_list.module
+    output: agh_sr_reject.txt
+  - name: custom-rules
+    path: rules/custom_reject_list.module
+    output: agh_custom_reject.txt

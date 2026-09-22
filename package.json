@@ -1,0 +1,16 @@
+{
+  "name": "adguard-dns-rules",
+  "version": "1.0.0",
+  "description": "Aggregate DNS filter rules and convert to AdGuard format",
+  "main": "dist/js/index.js",
+  "scripts": {
+    "build": "tsc && node dist/js/index.js",
+    "compile": "tsc",
+    "start": "node dist/js/index.js"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "typescript": "^7.0.2"
+  }
+}
