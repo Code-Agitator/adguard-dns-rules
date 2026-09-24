@@ -13,8 +13,8 @@ _set_mode_config() {
     else
         echo "Creating AdGuardHome with default config..."
         UPSTREAM_DNS="    - https://dns10.quad9.net/dns-query"
-        FILTER1_URL="https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_custom_reject.txt"
-        FILTER2_URL="https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_sr_reject.txt"
+        FILTER1_URL="https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/agrules/agh_custom_reject.txt"
+        FILTER2_URL="https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/agrules/agh_sr_reject.txt"
     fi
 }
 
