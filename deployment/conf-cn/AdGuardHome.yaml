@@ -30,7 +30,8 @@ dns:
   ratelimit_whitelist: []
   refuse_any: true
   upstream_dns:
-    - https://dns10.quad9.net/dns-query
+    - 223.5.5.5
+    - 119.29.29.29
   upstream_dns_file: ""
   bootstrap_dns:
     - 9.9.9.10

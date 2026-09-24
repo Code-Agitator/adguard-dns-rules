@@ -18,11 +18,17 @@ adguard-dns-rules 是一个 DNS 过滤规则管理框架，主要功能包括：
 ### 已经部署了`AdGuard Home`修改配置并重启
 
 1. 订阅链接
-
+   - https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_custom_reject.txt
+   - https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_sr_reject.txt
 2. 中国宝宝体质链接
     - https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_custom_reject.txt
     - https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_sr_reject.txt
-
+### 第一次部署`AdGuard Home`
+- 设置上游DNS
+```text
+223.5.5.5
+119.29.29.29
+```
 ## 项目结构
 
 ```
