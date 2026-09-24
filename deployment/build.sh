@@ -1,0 +1,283 @@
+#!/bin/bash
+
+MODE="default"
+SCRIPT_DIR=""
+
+
+_set_mode_config() {
+    if [ "$MODE" = "cn" ]; then
+        echo "Creating AdGuardHome with CN-friendly config..."
+        UPSTREAM_DNS=$'    - 223.5.5.5\n    - 119.29.29.29'
+        FILTER1_URL="https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_custom_reject.txt"
+        FILTER2_URL="https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_sr_reject.txt"
+    else
+        echo "Creating AdGuardHome with default config..."
+        UPSTREAM_DNS="    - https://dns10.quad9.net/dns-query"
+        FILTER1_URL="https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_custom_reject.txt"
+        FILTER2_URL="https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_sr_reject.txt"
+    fi
+}
+
+_parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --cn)
+                MODE="cn"
+                shift
+                ;;
+            *)
+                echo "Unknown argument: $1"
+                exit 1
+                ;;
+        esac
+    done
+}
+
+_create_dirs() {
+    mkdir -p agh/conf agh/work
+    cd agh
+}
+
+_write_docker_compose() {
+    cat > docker-compose.yml <<'DOCKEREOF'
+version: '3.8'
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: unless-stopped
+    ports:
+      - "853:53/tcp"
+      - "853:53/udp"
+      - "3000:3000/tcp"
+    volumes:
+      - ./work:/opt/adguardhome/work
+      - ./conf:/opt/adguardhome/conf
+DOCKEREOF
+}
+
+
+
+_write_adguardhome_config() {
+    cat > conf/AdGuardHome.yaml <<YCMEOF
+http:
+  pprof:
+    port: 6060
+    enabled: false
+  doh:
+    routes:
+      - GET /dns-query
+      - POST /dns-query
+      - GET /dns-query/{ClientID}
+      - POST /dns-query/{ClientID}
+    insecure_enabled: false
+  address: 0.0.0.0:3000
+  session_ttl: 30d
+users:
+  - name: admin
+    password: \$2b\$05\$az4GyFTozhEjyvAZhGR4KuguNkX.nwtCHowES4Tmp5Mi3zQh9/322
+auth_attempts: 5
+block_auth_min: 15
+http_proxy: ""
+language: ""
+theme: auto
+dns:
+  bind_hosts:
+    - 0.0.0.0
+  port: 53
+  anonymize_client_ip: false
+  ratelimit: 20
+  ratelimit_subnet_len_ipv4: 24
+  ratelimit_subnet_len_ipv6: 56
+  ratelimit_whitelist: []
+  refuse_any: true
+  upstream_dns:
+${UPSTREAM_DNS}
+  upstream_dns_file: ""
+  bootstrap_dns:
+    - 9.9.9.10
+    - 149.112.112.10
+    - 2620:fe::10
+    - 2620:fe::fe:10
+  fallback_dns: []
+  upstream_mode: load_balance
+  fastest_timeout: 1s
+  allowed_clients: []
+  disallowed_clients: []
+  blocked_hosts:
+    - version.bind
+    - id.server
+    - hostname.bind
+  trusted_proxies:
+    - 127.0.0.0/8
+    - ::1/128
+  cache_enabled: true
+  cache_size: 4194304
+  cache_ttl_min: 0
+  cache_ttl_max: 0
+  cache_optimistic: false
+  cache_optimistic_answer_ttl: 30s
+  cache_optimistic_max_age: 12h
+  bogus_nxdomain: []
+  aaaa_disabled: false
+  enable_dnssec: true
+  edns_client_subnet:
+    custom_ip: ""
+    enabled: false
+    use_custom: false
+  max_goroutines: 300
+  handle_ddr: true
+  ipset: []
+  ipset_file: ""
+  bootstrap_prefer_ipv6: false
+  upstream_timeout: 10s
+  private_networks: []
+  use_private_ptr_resolvers: false
+  local_ptr_upstreams: []
+  use_dns64: false
+  dns64_prefixes: []
+  serve_http3: false
+  use_http3_upstreams: false
+  serve_plain_dns: true
+  hostsfile_enabled: true
+  pending_requests:
+    enabled: true
+tls:
+  enabled: false
+  server_name: ""
+  force_https: false
+  port_https: 443
+  port_dns_over_tls: 853
+  port_dns_over_quic: 853
+  port_dnscrypt: 0
+  dnscrypt_config_file: ""
+  certificate_chain: ""
+  private_key: ""
+  certificate_path: ""
+  private_key_path: ""
+  strict_sni_check: false
+querylog:
+  dir_path: ""
+  ignored: []
+  interval: 90d
+  size_memory: 1000
+  enabled: true
+  ignored_enabled: false
+  file_enabled: true
+statistics:
+  dir_path: ""
+  ignored: []
+  interval: 1d
+  enabled: true
+  ignored_enabled: false
+filters:
+  - enabled: true
+    url: ${FILTER1_URL}
+    name: custom
+    id: 1790046054
+  - enabled: true
+    url: ${FILTER2_URL}
+    name: shadowrocket-rules
+    id: 1790046055
+whitelist_filters: []
+user_rules: []
+dhcp:
+  enabled: false
+  interface_name: ""
+  local_domain_name: lan
+  dhcpv4:
+    gateway_ip: ""
+    subnet_mask: ""
+    range_start: ""
+    range_end: ""
+    lease_duration: 86400
+    icmp_timeout_msec: 1000
+    options: []
+  dhcpv6:
+    range_start: ""
+    lease_duration: 86400
+    ra_slaac_only: false
+    ra_allow_slaac: false
+filtering:
+  blocking_ipv4: ""
+  blocking_ipv6: ""
+  blocked_services:
+    schedule:
+      time_zone: UTC
+    ids: []
+  protection_disabled_until: null
+  safe_search:
+    enabled: false
+    bing: true
+    duckduckgo: true
+    ecosia: true
+    google: true
+    pixabay: true
+    yandex: true
+    youtube: true
+  blocking_mode: default
+  parental_block_host: family-block.dns.adguard.com
+  safebrowsing_block_host: standard-block.dns.adguard.com
+  rewrites: []
+  safe_fs_patterns:
+    - /opt/adguardhome/work/userfilters/*
+  max_http_size: 256MB
+  safebrowsing_cache_size: 1048576
+  safesearch_cache_size: 1048576
+  parental_cache_size: 1048576
+  cache_time: 30
+  filters_update_interval: 24
+  blocked_response_ttl: 10
+  filtering_enabled: true
+  rewrites_enabled: true
+  parental_enabled: false
+  safebrowsing_enabled: false
+  protection_enabled: true
+clients:
+  runtime_sources:
+    whois: true
+    arp: true
+    rdns: true
+    dhcp: true
+    hosts: true
+  persistent: []
+log:
+  enabled: true
+  file: ""
+  max_backups: 0
+  max_size: 100
+  max_age: 3
+  compress: false
+  local_time: false
+  verbose: false
+os:
+  group: ""
+  user: ""
+  rlimit_nofile: 0
+schema_version: 34
+YCMEOF
+}
+
+_detect_compose() {
+    if docker compose version >/dev/null 2>&1; then
+        COMPOSE_CMD="docker compose"
+    elif docker-compose version >/dev/null 2>&1; then
+        COMPOSE_CMD="docker-compose"
+    else
+        echo "Error: Neither 'docker compose' nor 'docker-compose' found"
+        exit 1
+    fi
+}
+
+_main() {
+    _parse_args "$@"
+    _create_dirs
+    _write_docker_compose
+    _set_mode_config
+    _write_adguardhome_config
+    _detect_compose
+    $COMPOSE_CMD up -d
+}
+
+_main "$@"
