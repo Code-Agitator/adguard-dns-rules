@@ -110,11 +110,11 @@ statistics:
   ignored_enabled: false
 filters:
   - enabled: true
-    url: https://raw.giteeusercontent.com/agitator/adguard-dns-rules/raw/refactory/refact/agrules/agh_custom_reject.txt
+    url: https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_custom_reject.txt
     name: custom
     id: 1790046054
   - enabled: true
-    url: https://raw.giteeusercontent.com/agitator/adguard-dns-rules/raw/refactory/refact/agrules/agh_sr_reject.txt
+    url: https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_sr_reject.txt
     name: shadowrocket-rules
     id: 1790046055
 whitelist_filters: []

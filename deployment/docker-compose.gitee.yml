@@ -11,4 +11,4 @@ services:
       - "3000:3000/tcp" # webui
     volumes:
       - ./work:/opt/adguardhome/work
-      - ./conf-gitee:/opt/adguardhome/conf
+      - ./conf-cn:/opt/adguardhome/conf

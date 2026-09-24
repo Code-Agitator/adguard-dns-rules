@@ -13,6 +13,16 @@ adguard-dns-rules 是一个 DNS 过滤规则管理框架，主要功能包括：
 3. **自定义规则维护** — 支持维护一套自定义拒绝列表，补充上游规则的不足
 4. **一键部署** — 提供 Docker Compose 方案，一键部署 AdGuard Home 并自动订阅本项目生成的规则
 
+## 快速开始
+
+### 已经部署了`AdGuard Home`修改配置并重启
+
+1. 订阅链接
+
+2. 中国宝宝体质链接
+    - https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_custom_reject.txt
+    - https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_sr_reject.txt
+
 ## 项目结构
 
 ```
@@ -63,6 +73,7 @@ npm run build
 ```
 
 构建流程：
+
 1. 加载所有源配置
 2. 逐个获取原始规则（远程拉取 / 本地读取）
 3. 使用对应转换器将规则转为 AdGuard DNS 格式
@@ -70,7 +81,8 @@ npm run build
 
 ### 2. 自定义规则
 
-`rules/custom_reject_list.module` 维护了一套自定义拒绝列表，涵盖国内常用应用的广告/追踪域名（如墨迹天气、微信小程序、彩云天气、中国电信等）。这些规则在转换后被输出为 AdGuard 格式的 `agh_custom_reject.txt`，可直接订阅。
+`rules/custom_reject_list.module` 维护了一套自定义拒绝列表，涵盖国内常用应用的广告/追踪域名（如墨迹天气、微信小程序、彩云天气、中国电信等）。这些规则在转换后被输出为
+AdGuard 格式的 `agh_custom_reject.txt`，可直接订阅。
 
 ### 3. 部署 AdGuard Home
 
@@ -84,8 +96,9 @@ docker compose up -d
 访问 `http://localhost:3000` 即可进入 AdGuard Home 管理面板。
 
 **配置文件**：
+
 - `deployment/conf/AdGuardHome.yaml` — GitHub 源（自动拉取规则）
-- `deployment/conf-gitee/AdGuardHome.yaml` — Gitee 源（国内加速）
+- `deployment/conf-cn/AdGuardHome.yaml` — 适合中国宝宝体质（国内加速）
 
 两个配置均已预配置好过滤器订阅地址，开箱即用。
 
@@ -101,19 +114,7 @@ docker compose up -d
 ```bash
 npm install
 npm run build    # 编译并运行，生成 agrules/
-npm run compile  # 仅编译 TypeScript
-npm start        # 运行已编译的程序
 ```
-
-### CI/CD
-
-项目内置 GitHub Actions 自动构建工作流（`.github/workflows/build.yml`）：
-
-- **定时触发** — 每日 UTC 01:00 自动构建
-- **推送触发** — 推送到 master 分支时自动构建
-- **手动触发** — 通过 GitHub Actions 界面手动触发
-
-构建完成后自动提交更新后的规则文件到仓库。
 
 ## 源配置格式
 
@@ -134,11 +135,11 @@ sources:
 
 当前支持 `shadowrocket` 转换器，将 Shadowrocket 格式的规则转换为 AdGuard DNS 过滤语法：
 
-| Shadowrocket 类型 | AdGuard 格式 |
-|---|---|
-| `DOMAIN-KEYWORD` | 原样保留（子串匹配） |
-| `DOMAIN` / `DOMAIN-SUFFIX` | `\|\|domain^` |
-| `IP-CIDR` | 跳过（DNS 层无法拦截） |
+| Shadowrocket 类型          | AdGuard 格式           |
+|----------------------------|------------------------|
+| `DOMAIN-KEYWORD`           | 原样保留（子串匹配）   |
+| `DOMAIN` / `DOMAIN-SUFFIX` | `\|\|domain^`          |
+| `IP-CIDR`                  | 跳过（DNS 层无法拦截） |
 
 ## 许可证
 

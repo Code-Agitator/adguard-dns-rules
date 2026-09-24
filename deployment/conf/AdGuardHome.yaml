@@ -110,11 +110,11 @@ statistics:
   ignored_enabled: false
 filters:
   - enabled: true
-    url: https://raw.githubusercontent.com/Cowjiang/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_custom_reject.txt
+    url: https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_custom_reject.txt
     name: custom
     id: 1790046054
   - enabled: true
-    url: https://raw.githubusercontent.com/Cowjiang/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_sr_reject.txt
+    url: https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/refactory/refact/agrules/agh_sr_reject.txt
     name: shadowrocket-rules
     id: 1790046055
 whitelist_filters: []
