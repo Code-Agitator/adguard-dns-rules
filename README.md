@@ -18,23 +18,24 @@ adguard-dns-rules 是一个 DNS 过滤规则管理框架，主要功能包括：
 ### 已经部署了`AdGuard Home`修改配置并重启
 
 1. 订阅链接
-   - https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/agrules/agh_custom_reject.txt
-   - https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/agrules/agh_sr_reject.txt
+    - https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/agrules/agh_custom_reject.txt
+    - https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/agrules/agh_sr_reject.txt
 2. 中国宝宝体质链接
     - https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_custom_reject.txt
     - https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/agrules/agh_sr_reject.txt
+
 ### 第一次部署`AdGuard Home`
 
-一行命令一键部署：
+1. 一行命令一键部署：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/Code-Agitator/adguard-dns-rules/refs/heads/main/deployment/build.sh | bash
 ```
 
-或使用国内镜像加速（CN 友好模式）：
+2. 适配中国宝宝体质
 
 ```bash
-curl -fsSL https://jsd.onmicrosoft.cn/gh/Code-Agitator/refact/deployment/build.sh | bash -s -- --cn
+curl -fsSL https://jsd.onmicrosoft.cn/gh/Code-Agitator/adguard-dns-rules/deployment/build.sh | bash -s -- --cn
 ```
 
 部署后访问 `http://localhost:3000` 进入 AdGuard Home 管理面板。
